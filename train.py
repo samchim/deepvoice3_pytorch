@@ -594,10 +594,10 @@ def guided_attention(N, max_N, T, max_T, g):
 def guided_attentions(input_lengths, target_lengths, max_target_len, g=0.2):
     B = len(input_lengths)
     max_input_len = input_lengths.max()
-    W = np.zeros((B, max_target_len, max_input_len), dtype=np.float32)
+    W = np.zeros((B, int(max_target_len), int(max_input_len)), dtype=np.float32)
     for b in range(B):
-        W[b] = guided_attention(input_lengths[b], max_input_len,
-                                target_lengths[b], max_target_len, g).T
+        W[b] = guided_attention(input_lengths[b], int(max_input_len),
+                                target_lengths[b], int(max_target_len), g).T
     return W
 
 
@@ -640,7 +640,7 @@ def train(device, model, data_loader, optimizer, writer,
                 mel = mel[:, 0::downsample_step, :].contiguous()
 
             # Lengths
-            input_lengths = input_lengths.long().numpy()
+            input_lengths = input_lengths.float().numpy()
             decoder_lengths = target_lengths.long().numpy() // r // downsample_step
 
             max_seq_len = max(input_lengths.max(), decoder_lengths.max())

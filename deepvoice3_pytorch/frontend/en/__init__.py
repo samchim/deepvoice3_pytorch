@@ -4,6 +4,8 @@ from deepvoice3_pytorch.frontend.text.symbols import symbols
 import nltk
 from random import random
 
+nltk.download('cmudict')
+
 n_vocab = len(symbols)
 
 _arpabet = nltk.corpus.cmudict.dict()
